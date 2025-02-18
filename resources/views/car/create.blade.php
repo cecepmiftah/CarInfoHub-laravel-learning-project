@@ -20,7 +20,7 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label>Maker</label>
-                                    <select name="maker_id" id="maker" required>
+                                    <select name="maker_id" id="makerSelect" required>
                                         <option value="">Maker</option>
                                         @foreach ($makers as $maker)
                                             <option value="{{ $maker->id }}"
@@ -39,7 +39,7 @@
                                 <div class="form-group">
                                     <label>Model</label>
 
-                                    <select name="model_id" id="model" disabled required>
+                                    <select name="model_id" id="modelSelect" disabled required>
                                         <option value="">Model</option>
                                     </select>
                                     @error('model_id')
@@ -142,7 +142,7 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label>State/Region</label>
-                                    <select name="state_id" id="state" required>
+                                    <select name="state_id" id="stateSelect" required>
                                         <option value="">State/Region</option>
 
                                         @foreach ($states as $state)
@@ -161,7 +161,7 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label>City</label>
-                                    <select name="city_id" id="city" disabled required>
+                                    <select name="city_id" id="citySelect" disabled required>
                                         <option value="{{ old('city_id') }}">
                                             {{ old('city_id') ?? 'City' }}</option>
                                     </select>
@@ -318,7 +318,7 @@
         });
     </script> --}}
 
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             function loadDropdown(triggerElement, targetElement, urlPrefix, placeholderText) {
                 $(triggerElement).change(function() {
@@ -355,5 +355,5 @@
             // Load cities based on state selection
             loadDropdown('#state', '#city', '/get-cities', '-- Select City --');
         });
-    </script>
+    </script> --}}
 </x-app-layout>

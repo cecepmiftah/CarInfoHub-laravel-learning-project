@@ -280,14 +280,35 @@ class CarController extends Controller
         return redirect()->back()->with('success', 'Cars Deleted Succesfully!');
     }
 
-    public function search() 
+    public function search(Request $request) 
     {
 
-        $query = Car::where('published_at', '<', now())
-                    ->with(['primaryImage', 'city', 'carType', 'fuelType', 'maker', 'model'])
-                    ->orderBy('published_at', 'desc');        
+        // $query = Car::where('published_at', '<', now())
+        //             ->with(['primaryImage', 'city', 'carType', 'fuelType', 'maker', 'model'])
+        //             ->orderBy('published_at', 'desc');        
         
-        $cars = $query->paginate(15);
+        // $cars = $query->paginate(15);
+
+        $cars = Car::query();
+        
+        $cars->when($request->maker_id, fn ($q) => $q->where('maker_id', $request->maker_id));
+        $cars->when($request->model_id, fn ($q) => $q->where('model_id', $request->model_id));
+        $cars->when($request->state_id, fn ($q) => $q->where('state_id', $request->state_id));
+        $cars->when($request->city_id, fn ($q) => $q->where('city_id', $request->city_id));
+        $cars->when($request->car_type_id, fn ($q) => $q->where('car_type_id', $request->car_type_id));
+        $cars->when($request->fuel_type_id, fn ($q) => $q->where('fuel_type_id', $request->fuel_type_id));
+
+
+        $cars->when($request->year_from, fn ($q) => $q->where('year', '>=', $request->year_from));
+        $cars->when($request->year_to, fn ($q) => $q->where('year', '<=', $request->year_to));
+
+        $cars->when($request->price_from, fn ($q) => $q->where('price', '>=', $request->price_from));
+        $cars->when($request->price_to, fn ($q) => $q->where('price', '<=', $request->price_to));
+
+        $cars->when($request->mileage, fn ($q) => $q->where('mileage', '<=', $request->mileage));
+
+        // Jalankan query dan dapatkan hasilnya
+        $cars = $cars->paginate(15);
 
         return view('car.search', ['cars' => $cars]);
     }

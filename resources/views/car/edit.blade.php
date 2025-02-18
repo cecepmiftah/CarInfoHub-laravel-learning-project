@@ -23,7 +23,7 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label>Maker</label>
-                                    <select name="maker_id" id="maker" required>
+                                    <select name="maker_id" id="makerSelect" required>
                                         <option value="">Maker</option>
                                         @foreach ($data['makers'] as $maker)
                                             <option value="{{ $maker->id }}"
@@ -39,7 +39,7 @@
                                 <div class="form-group">
                                     <label>Model</label>
 
-                                    <select name="model_id" id="model" disabled required>
+                                    <select name="model_id" id="modelSelect" disabled required>
                                         <option value="{{ $car->model_id }}">{{ $car->model->name }}</option>
                                     </select>
 
@@ -118,7 +118,7 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label>State/Region</label>
-                                    <select name="state_id" id="state" required>
+                                    <select name="state_id" id="stateSelect" required>
                                         <option value="">State/Region</option>
 
                                         @foreach ($data['states'] as $state)
@@ -133,7 +133,7 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label>City</label>
-                                    <select name="city_id" id="city" disabled required>
+                                    <select name="city_id" id="citySelect" disabled required>
                                         <option value="{{ $car->city_id }}">{{ $car->city->name }}</option>
                                     </select>
                                 </div>
@@ -212,46 +212,4 @@
             </form>
         </div>
     </main>
-
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <script>
-        $(document).ready(function() {
-            function loadDropdown(triggerElement, targetElement, urlPrefix, placeholderText) {
-                $(triggerElement).change(function() {
-                    var id = $(this).val();
-                    var dropdown = $(targetElement);
-
-                    if (id) {
-                        $.ajax({
-                            url: `${urlPrefix}/${id}`,
-                            type: 'GET',
-                            success: function(response) {
-                                dropdown.empty().append(
-                                    `<option value="">${placeholderText}</option>`);
-
-                                $.each(response, function(index, item) {
-                                    dropdown.append(
-                                        `<option value="${item.id}">${item.name}</option>`
-                                    );
-                                });
-
-                                dropdown.prop('disabled', false);
-                            }
-                        });
-                    } else {
-                        dropdown.empty().append(`<option value="">${placeholderText}</option>`).prop(
-                            'disabled', true);
-                    }
-                });
-            }
-
-            // Load models based on maker selection
-            loadDropdown('#maker', '#model', '/get-models', '-- Select Model --');
-
-            // Load cities based on state selection
-            loadDropdown('#state', '#city', '/get-cities', '-- Select City --');
-        });
-    </script>
 </x-app-layout>
