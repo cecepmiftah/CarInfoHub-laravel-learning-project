@@ -145,10 +145,6 @@ class CarController extends Controller
     {
         // $this->authorize('update', $car);
 
-        if(! Gate::allows('edit-car', $car)) {
-            abort(403);
-        }
-
         $columnFeatures = (new CarFeatures())->getFillable();
         $columnFeatures = array_diff($columnFeatures, ['car_id']);
 
@@ -169,10 +165,6 @@ class CarController extends Controller
      */
     public function update(Request $request, Car $car)
     {
-        if(! Gate::allows('edit-car', $car)) {
-            abort(403, 'You are not authorized to edit this car.');
-        }
-
         $validated = $request->validate([
             'maker_id' => 'sometimes|required|exists:makers,id',
             'model_id' => 'sometimes|required|exists:models,id',

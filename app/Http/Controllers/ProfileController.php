@@ -25,9 +25,6 @@ class ProfileController extends Controller
      */
     public function update(Request $request, User $user)
     {
-       if(Gate::denies('update-user', $user)) {
-        abort(403);
-       }
 
        $validated = $request->validate([
         'name' => 'required|string|max:255',
@@ -58,9 +55,6 @@ class ProfileController extends Controller
 
     public function updatePassword(Request $request, User $user) 
     {
-        if(Gate::denies('update-user', $user)) {
-            abort(403);
-           }
 
         $validated = $request->validateWithBag('updatePassword', [
             'current_password' => ['required', 'current_password'],

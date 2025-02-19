@@ -147,7 +147,7 @@
                         <img src="/img/avatar.png" alt="" class="car-details-owner-image" />
                         <div>
                             <h3 class="car-details-owner">{{ $car->owner->name }}</h3>
-                            @can('update', $car)
+                            @can('edit-car', $car)
                                 <a href="{{ route('car.edit', $car) }}" class="py-1 px-2 border border-spacing-1">Edit
                                     this car</a>
                             @endcan
