@@ -37,7 +37,10 @@ class CarPolicy
      */
     public function update(User $user, Car $car): bool
     {
-        return $user->id === $car->user_id;
+        // return $car->owner->is($user)
+        //     ? Response::allow()
+        //     : Response::deny('Sorry you are not the owner of this car');
+        return $car->owner->is($user);
     }
 
     /**

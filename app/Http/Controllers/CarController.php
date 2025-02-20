@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 
 class CarController extends Controller
 {
@@ -209,14 +210,13 @@ class CarController extends Controller
             );
 
             if ($request->hasFile('images')) {
-                $car->images()->delete();
                 foreach ($request->file('images') as $index => $image) {
                     $path = $image->store('cars', 'public');
         
                     CarImage::create([
                         'car_id' => $car->id,
                         'image_path' => $path,
-                        'position' => $index + 1
+                        'position' =>  $car->images->count() + ($index + 1)
                     ]);
         
                 };
@@ -242,6 +242,13 @@ class CarController extends Controller
             abort(403, 'You are not authorized to delete this car.');
         }
 
+        // Delete car images from the directory
+        foreach ($car->images as $image) {
+                // unlink($imagePath);
+                Storage::disk('public')->delete($image->image_path);
+            
+        }
+        
         $car->images()->delete();
         $car->features()->delete();
         $car->delete();
@@ -264,6 +271,14 @@ class CarController extends Controller
     
         // Hapus semua relasi sebelum menghapus mobilnya
         Car::whereIn('id', $carIds)->each(function ($car) {
+            foreach ($car->images as $image) {
+                $imagePath = public_path('storage/' . $image->image_path);
+    
+                if (file_exists($imagePath)) {
+                    Storage::disk('public')->delete($image->image_path);
+                }
+            }
+
             $car->images()->delete();
             $car->features()->delete();
             $car->delete();
@@ -360,7 +375,13 @@ class CarController extends Controller
 
 
      if($request->has('delete_images')) {
-        $car->images()->whereIn('id', $request->delete_images)->delete();
+        $car->images()
+            ->whereIn('id', $request->delete_images)
+            ->get()
+            ->each(function ($image) {
+                    Storage::disk('public')->delete($image->image_path);
+                    $image->delete();
+            });
      }
 
      if($request->has('positions')) {

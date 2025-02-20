@@ -40,14 +40,17 @@ Route::delete('/cars/delete-multiple', [CarController::class, 'destroyMultiple']
 
 // Route::resource('car', CarController::class)->except('show')->middleware('auth');
 Route::get('/car', [CarController::class, 'index'])->name('car.index')->middleware('auth');
-Route::get('/car/{car}', [CarController::class, 'show'])->name('car.show');
 
 Route::get('/car/create', [CarController::class, 'create'])->name('car.create')->middleware('auth');
 Route::post('/car', [CarController::class, 'store'])->name('car.store')->middleware('auth');
 
+// This route using gate to check if user can edit the car
 Route::get('/car/{car}/edit', [CarController::class, 'edit'])->name('car.edit')->middleware('auth')->can('edit-car', 'car');
-Route::patch('/car/{car}', [CarController::class, 'update'])->name('car.update')->middleware('auth')->can('edit-car', 'car');
+// This route using policy to check if the user can edit the car
+Route::patch('/car/{car}', [CarController::class, 'update'])->name('car.update')->middleware('auth')->can('update', 'car');
 Route::delete('/car/{car}', [CarController::class, 'destroy'])->name('car.destroy')->middleware('auth')->can('edit-car', 'car');
+
+Route::get('/car/{car}', [CarController::class, 'show'])->name('car.show');
 
 Route::resource('user', ProfileController::class)->only(['edit', 'update'])->middleware(['auth', 'can:update-user,user']);
 

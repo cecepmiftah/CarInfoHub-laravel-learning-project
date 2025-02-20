@@ -31,8 +31,11 @@
                                             <td>
                                                 <a href="{{ route('car.show', $car) }}">
 
-                                                    <img src="{{ asset('storage/' . $car->primaryImage->image_path) }}"
-                                                        alt="" class="my-cars-img-thumbnail" />
+                                                    @isset($car->primaryImage)
+                                                        <img src="{{ asset('storage/' . $car->primaryImage->image_path) }}"
+                                                            alt="" class="my-cars-img-thumbnail" />
+                                                    @endisset
+
                                                 </a>
                                             </td>
                                             <td>{{ $car->year }} - {{ $car->maker->name }} {{ $car->model->name }}

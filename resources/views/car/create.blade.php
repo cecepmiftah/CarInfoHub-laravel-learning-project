@@ -162,8 +162,7 @@
                                 <div class="form-group">
                                     <label>City</label>
                                     <select name="city_id" id="citySelect" disabled required>
-                                        <option value="{{ old('city_id') }}">
-                                            {{ old('city_id') ?? 'City' }}</option>
+                                        <option value="">City</option>
                                     </select>
                                     @error('city_id')
                                         <p class=""> {{ $message }}</p>

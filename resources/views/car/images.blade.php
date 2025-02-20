@@ -3,7 +3,7 @@
         <div>
             <div class="container">
                 <h1 class="car-details-page-title">
-                    Manage Images for: 2016 - Lexus RX200t
+                    Manage Images for: {{ $car->year }} - {{ $car->maker->name }} {{ $car->model->name }}
                 </h1>
 
                 <div class="car-images-wrapper">
