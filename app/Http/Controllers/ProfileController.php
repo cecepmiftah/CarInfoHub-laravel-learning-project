@@ -48,9 +48,9 @@ class ProfileController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $user)
     {
-        //
+        dd($user);
     }
 
     public function updatePassword(Request $request, User $user) 

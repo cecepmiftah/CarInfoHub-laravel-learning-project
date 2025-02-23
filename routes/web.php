@@ -10,17 +10,21 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::controller(SignupController::class)->group(function () {
-    Route::get('/signup', 'create')->name('signup');
-    Route::post('/signup','store')->name('signup.store');
+Route::middleware('guest')->group(function () {
+    Route::controller(SignupController::class)->group(function () {
+        Route::get('/signup', 'create')->name('signup');
+        Route::post('/signup', 'store')->name('signup.store');
+    });
+
+    Route::get('/login', [LoginController::class, 'create'])->name('login');
+    Route::post('/login', [LoginController::class, 'store'])->name('login.store');
 });
 
 Route::controller(ResetPasswordController::class)->group(function () {
     Route::get('/reset-password', 'create')->name('reset-password');
 });
 
-Route::get('/login', [LoginController::class, 'create'])->name('login');
-Route::post('/login', [LoginController::class, 'store'])->name('login.store');
+
 Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
 
 Route::get('/car/search', [CarController::class, 'search'])->name('car.search');
@@ -52,6 +56,6 @@ Route::delete('/car/{car}', [CarController::class, 'destroy'])->name('car.destro
 
 Route::get('/car/{car}', [CarController::class, 'show'])->name('car.show');
 
-Route::resource('user', ProfileController::class)->only(['edit', 'update'])->middleware(['auth', 'can:update-user,user']);
+Route::resource('user', ProfileController::class)->only(['edit', 'update', 'destroy'])->middleware(['auth', 'can:update-user,user']);
 
 Route::patch('/user/update-password/{user}', [ProfileController::class, 'updatePassword'])->name('user.update-password')->middleware('auth');

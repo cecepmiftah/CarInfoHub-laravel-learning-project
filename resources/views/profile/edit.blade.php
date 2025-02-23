@@ -73,5 +73,20 @@
                 <button type="submit" class="btn btn-primary">Update Password</button>
             </div>
         </form>
+
     </div>
+
+    {{-- <div class="w-full m-auto my-6 text-center">
+        <div>
+            <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                data-open-modal data-user="{{ $user->id }}">Delete
+                Your
+                Account</button>
+        </div>
+
+    </div> --}}
+
+    </div>
+
+    <x-modal text="Are you sure you want to delete your account? This action cannot be undone." />
 </x-app-layout>

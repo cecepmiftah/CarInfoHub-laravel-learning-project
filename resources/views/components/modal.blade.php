@@ -1,3 +1,5 @@
+@props(['text' => null])
+
 <div class="relative z-10 hidden" id="deleteModal" aria-labelledby="modal-title" role="dialog" aria-modal="true">
     <div class="fixed inset-0 bg-gray-500/75 transition-opacity" aria-hidden="true"></div>
 
@@ -17,7 +19,14 @@
                         </div>
                         <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                             <h3 class="text-base font-semibold text-gray-900" id="modal-title">Confirm Deletion</h3>
-                            <p class="text-sm text-gray-500 mt-2">Are you sure you want to delete this car?</p>
+                            <p class="text-sm text-gray-500 mt-2">
+                                @if ($text)
+                                    {{ $text }}
+                                @else
+                                    Are you sure you want to
+                                    delete this car?
+                                @endif
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -43,11 +52,21 @@
         const closeModalButtons = document.querySelectorAll('[data-close-modal]');
         const deleteForm = document.getElementById('deleteForm');
 
+        const isDeleteAccount = document.getElementById('delete-account');
+
         function openModal(event) {
             const carId = event.target.getAttribute('data-id');
             const parsedIds = carId ? JSON.parse(carId) : [];
-            console.log(parsedIds);
 
+            const dataUserId = event.target.getAttribute('data-user');
+
+            // if (isDeleteAccount && dataUserId) {
+            //     deleteForm.action = `/user/${dataUserId}`;
+            // } else if (parsedIds.length > 0) {
+            //     deleteForm.action = `/cars/delete-multiple`;
+            // } else {
+            //     deleteForm.action = `/car/${carId}`;
+            // }
             if (parsedIds.length > 0) {
                 deleteForm.action = `/cars/delete-multiple`;
             } else {
